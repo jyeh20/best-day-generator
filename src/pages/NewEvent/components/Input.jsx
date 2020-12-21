@@ -3,7 +3,6 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider, KeyboardTimePicker } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
-import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
@@ -11,20 +10,22 @@ const useStyles = makeStyles(
     (theme) => ({
         inputFieldLayout: {
             display: 'flex',
-            justifyContent: 'center',
             flexDirection: 'column',
             paddingTop: '15px',
         },
 
         taskName: {
-            maxWidth: '300px',
-            padding: '10px',
+            maxWidth: '200px',
+            display: 'flex',
+            flexDirection:'row',
+            alignSelf:'center',
             paddingBottom: '30px',
         },
 
         timeInput: {
             display: 'flex',
             flexDirection: 'row',
+            alignSelf:'center',
         },
 
         timePickerWidth: {
@@ -46,6 +47,9 @@ export default function Input() {
     const classes = useStyles();
     return (
         <div className={classes.inputFieldLayout}>
+            <Typography variant="h6">
+                What do you want to get done tomorrow?
+            </Typography>
             <div className={classes.taskName}>
                 <TextField id="taskName" label="Task Name" variant="standard" fullWidth />
             </div>
