@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -7,23 +7,24 @@ import CardContent from '@material-ui/core/CardContent';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
-import Delete from '@material-ui/icons/Delete';
+import CheckIcon from '@material-ui/icons/Check';
 import Edit from '@material-ui/icons/Edit';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles(
     (theme) => ({
         card: {
-            maxWidth: '200px',
+            maxWidth: '300px',
             minWidth: '200px',
-            minHeight: '200px',
             margin:'auto',
             alignItems: 'center',
-            backgroundColor: '#4a68ff',
+            backgroundColor:"#4a68ff",
         },
 
         expand: {
+            alignSelf: 'flex-end',
             transform: 'rotate(0deg)',
             marginLeft: 'auto',
             transition: theme.transitions.create('transform', {
@@ -61,7 +62,7 @@ const useStyles = makeStyles(
  */
 export default function Cards(props) {
     const classes = useStyles();
-    const [expanded, setExpanded] = React.useState(false);
+    const [expanded, setExpanded] = useState(false);
 
     /**
      * handler for expanding for more details about an event
@@ -83,10 +84,16 @@ export default function Cards(props) {
             </CardContent>
 
             <CardActions disableSpacing className={classes.cardActions}>
-
-                <IconButton aria-label="delete">
-                    <Delete className={classes.colors} />
-                </IconButton>
+                <Typography>
+                    <Button
+                        variant="contained"
+                        color="#4a68ff"
+                        className={classes.button}
+                        startIcon={<CheckIcon />}
+                    >
+                        Done
+                    </Button>
+                </Typography>
 
                 <IconButton aria-label="edit">
                     <Edit className={classes.colors} />

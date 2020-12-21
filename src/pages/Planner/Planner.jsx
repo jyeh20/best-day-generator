@@ -18,14 +18,14 @@ const useStyles = makeStyles(
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            marginTop: '25vh'
+            marginTop: '5%'
         },
 
         paperSchedule: {
             display: 'flex',
             paddingTop: '40px',
             minWidth: '50%',
-            maxWidth: '60%',
+            maxWidth: '70%',
             margin: 'auto',
             flexDirection: 'column',
             elevation: 4,
@@ -36,12 +36,12 @@ const useStyles = makeStyles(
             display: 'flex',
             margin: 'auto',
             flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
         },
 
-        card: {
-            maxWidth: '200px',
-            margin:'auto',
-            alignItems: 'center',
+        cardDiv: {
+            padding: '20px',
         },
 
         expand: {
@@ -86,8 +86,36 @@ export default function Planner() {
             <Paper className={classes.paperSchedule}>
                 <div className={classes.cardStructure}>
                     <Fade in={true} timeout={{enter: 2000}}>
-                        <Card />
+                        <div className={classes.cardDiv}>
+                            <Card />
+                        </div>
                     </Fade>
+                    <Fade in={true} timeout={{enter: 2000}}>
+                        <div className={classes.cardDiv}>
+                            <Card />
+                        </div>
+                    </Fade>
+                    <Fade in={true} timeout={{enter: 2000}}>
+                        <div className={classes.cardDiv}>
+                            <Card />
+                        </div>
+                    </Fade>
+                    <Fade in={true} timeout={{enter: 2000}}>
+                        <div className={classes.cardDiv}>
+                            <Card />
+                        </div>
+                    </Fade>
+                    <Fade in={true} timeout={{enter: 2000}}>
+                        <div className={classes.cardDiv}>
+                            <Card />
+                        </div>
+                    </Fade>
+                    <Fade in={true} timeout={{enter: 2000}}>
+                        <div className={classes.cardDiv}>
+                            <Card />
+                        </div>
+                    </Fade>
+
                 </div>
                 <div className={classes.addButton}>
                     <IconButton>
