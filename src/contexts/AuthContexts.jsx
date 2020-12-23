@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import app, { auth } from '../firebase/firebase';
+import { auth } from '../firebase/firebase';
 import { useHistory } from 'react-router-dom'
 import firebase from 'firebase';
 
@@ -11,6 +11,7 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState();
+    const [uid, setUid] = useState();
     const [loading, setLoading] = useState(true);
     const history = useHistory();
     var provider = new firebase.auth.GoogleAuthProvider();
@@ -23,14 +24,6 @@ export function AuthProvider({ children }) {
         auth.signInWithPopup(provider).then(function(result) {
             history.push("/")
           }).catch(function(error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            // The email of the user's account used.
-            var email = error.email;
-            // The firebase.auth.AuthCredential type that was used.
-            var credential = error.credential;
-            // ...
           });
     }
 
@@ -57,6 +50,7 @@ export function AuthProvider({ children }) {
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
             setCurrentUser(user)
+            setUid(user.uid);
             setLoading(false)
         })
 
@@ -65,6 +59,7 @@ export function AuthProvider({ children }) {
 
 
     const value = {
+        uid,
         currentUser,
         login,
         signup,

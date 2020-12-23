@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Container } from 'react-bootstrap'
-import firebase from './firebase/firebase';
 import { AuthProvider } from './contexts/AuthContexts';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import PrivateRoute from './Routes/PrivateRoute';
@@ -23,6 +22,7 @@ function App() {
                     <Switch>
                         <PrivateRoute exact path="/" component = {Planner} />
                         <PrivateRoute path="/update-profile" component={UpdateProfile} />
+                        <Route path="/add" component={NewEvent} />
                         <Route path="/signup" component = {SignUp} />
                         <Route path="/login" component = {Login} />
                         <Route path="/forgot-password" component = {ForgotPassword} />

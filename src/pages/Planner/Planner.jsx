@@ -70,8 +70,7 @@ const useStyles = makeStyles(
 /**
  * Main page of the application, where we can edit/delete/add events to our schedule
  */
-export default function Planner(props) {
-    console.log(props)
+export default function Planner() {
     const classes = useStyles();
     const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -79,7 +78,7 @@ export default function Planner(props) {
         setSelectedDate(date);
       };
 
-    
+
     return(
         <div className={classes.default}>
 

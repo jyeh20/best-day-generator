@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import Input from './components/Input';
+import { useAuth } from '../../contexts/AuthContexts';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -10,11 +11,12 @@ const useStyles = makeStyles (
         pageLayout: {
             display: 'flex',
             justifyContent: 'center',
+            minWidth: '40%',
         },
 
         container: {
             display: 'flex',
-            paddingTop: '5%',
+            paddingTop: '15%',
             minWidth: '40%',
         },
 
@@ -22,15 +24,15 @@ const useStyles = makeStyles (
             display: 'flex',
             justifyContent: 'center',
             minWidth: '100%',
-            minHeight: '70vh',
-
+            minHeight: '50vh',
         },
 
 
     })
 )
 
-export default function NewEvent(props) {
+export default function NewEvent() {
+    const { uid } = useAuth();
     const classes = useStyles();
 
 
@@ -39,7 +41,7 @@ export default function NewEvent(props) {
             <div className={classes.container}>
                 <Paper className={classes.paperLayout}>
                     <div>
-                        <Input uid={props.uid} />
+                        <Input uid={uid} />
                     </div>
                 </Paper>
             </div>

@@ -103,11 +103,11 @@ export default function Login() {
                                 <Link to="/forgot-password">Forgot Password?</Link>
                             </div>
                             <div className = "w-100 text-center mt-3">
-                                <ColoredLine color="gray"/>or
-
+                                <ColoredLine color="gray"/>
+                                or
                             </div>
                             <div  className={classes.googleButton}>
-                            <GoogleButton onClick={handleGoogle} />
+                                <GoogleButton onClick={handleGoogle} />
                             </div>
                     </Card.Body>
                 </Card>

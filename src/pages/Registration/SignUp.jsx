@@ -1,14 +1,24 @@
 import React, { useRef, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 
+import { makeStyles } from '@material-ui/core/styles';
+import ColoredLine from './components/ColoredLine';
+import GoogleButton from 'react-google-button';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
-import { useAuth } from '../../contexts/AuthContexts'
+import { useAuth } from '../../contexts/AuthContexts';
+
+const useStyles = makeStyles(
+    (theme) => ({
+
+    })
+)
 
 export default function SignUp() {
+    const classes = useStyles()
     const emailRef = useRef()
     const passwordRef = useRef()
     const passwordConfirmRef = useRef()
-    const { signup } = useAuth()
+    const { signup, signinGoogle } = useAuth()
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
     const history = useHistory()
@@ -27,6 +37,20 @@ export default function SignUp() {
             history.push("/")
         } catch {
             setError('Failed to create an account')
+        }
+
+        setLoading(false)
+    }
+
+    async function handleGoogle(e) {
+        e.preventDefault()
+
+        try {
+            setError('')
+            setLoading(true)
+            await signinGoogle()
+        } catch {
+            setError('Failed to sign in')
         }
 
         setLoading(false)
@@ -57,6 +81,13 @@ export default function SignUp() {
                             Sign up
                             </Button>
                     </Form>
+                        <div className = "w-100 text-center mt-3">
+                            <ColoredLine color="gray"/>
+                            or
+                        </div>
+                        <div  className={classes.googleButton}>
+                            <GoogleButton onClick={handleGoogle} />
+                        </div>
                 </Card.Body>
             </Card>
             <div className = "w-100 text-center mt-2">

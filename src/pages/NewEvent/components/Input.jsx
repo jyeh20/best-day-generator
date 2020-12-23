@@ -65,7 +65,6 @@ export default function Input(props) {
     const [startTime, setStartTime] = useState(new Date());
     const [endTime, setEndTime] = useState(new Date());
     const [description, setDescription] = useState("");
-    const [items, setItems] = useState([]);
 
 
     // Handlers
