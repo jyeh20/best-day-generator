@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import firebase from '../../firebase/firebase';
 import Header from './components/Header/Header';
 import DatePicker from './components/DatePicker/DatePicker';
 
@@ -71,7 +70,8 @@ const useStyles = makeStyles(
 /**
  * Main page of the application, where we can edit/delete/add events to our schedule
  */
-export default function Planner() {
+export default function Planner(props) {
+    console.log(props)
     const classes = useStyles();
     const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -79,8 +79,10 @@ export default function Planner() {
         setSelectedDate(date);
       };
 
+    
     return(
         <div className={classes.default}>
+
             <Header />
             <DatePicker date={selectedDate} onChange={handleDateChange} />
             <Paper className={classes.paperSchedule}>

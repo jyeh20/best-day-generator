@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 import Input from './components/Input';
-import Submit from './components/Submit';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -27,43 +26,20 @@ const useStyles = makeStyles (
 
         },
 
-        submitContainer: {
-            display: 'flex',
-            justifyContent: 'center',
-            paddingTop: '20px',
-        }
 
     })
 )
 
-export default function NewEvent() {
+export default function NewEvent(props) {
     const classes = useStyles();
-    const [items, setItems] = useState([]);
-    const [itemName, setItemName] = useState("");
-    const [itemValue, setItemValue] = useState("");
 
-    const addItems = event => {
-        event.preventDefault();
-        setItems([
-            ...items,
-            {
-                name: itemName,
-                value: itemValue
-            }
-        ]);
-        setItemName("");
-        setItemValue("");
-    }
 
     return(
         <div className={classes.pageLayout}>
             <div className={classes.container}>
                 <Paper className={classes.paperLayout}>
                     <div>
-                    <Input />
-                    <div className={classes.submitContainer}>
-                    <Submit />
-                    </div>
+                        <Input uid={props.uid} />
                     </div>
                 </Paper>
             </div>
