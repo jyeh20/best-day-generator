@@ -22,6 +22,7 @@ const useStyles = makeStyles (
 
         paperLayout: {
             display: 'flex',
+            padding: '5%',
             justifyContent: 'center',
             minWidth: '100%',
             minHeight: '50vh',
@@ -31,9 +32,10 @@ const useStyles = makeStyles (
     })
 )
 
-export default function NewEvent() {
+export default function NewEvent(props) {
     const { uid } = useAuth();
     const classes = useStyles();
+    const date = window.location.pathname.slice(5);
 
 
     return(
@@ -41,7 +43,7 @@ export default function NewEvent() {
             <div className={classes.container}>
                 <Paper className={classes.paperLayout}>
                     <div>
-                        <Input uid={uid} />
+                        <Input date={date} uid={uid} />
                     </div>
                 </Paper>
             </div>

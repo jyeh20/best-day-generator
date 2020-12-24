@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import firebase from '../../../firebase/firebase';
+import { Link, useHistory } from 'react-router-dom'
 
 import { makeStyles } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider, KeyboardTimePicker } from '@material-ui/pickers';
-import Button from '@material-ui/core/Button';
+import { Button } from 'react-bootstrap';
 import DateFnsUtils from '@date-io/date-fns';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
@@ -24,6 +25,10 @@ const useStyles = makeStyles(
             flexDirection:'row',
             alignSelf:'center',
             paddingBottom: '30px',
+        },
+
+        text: {
+            textAlign: 'center',
         },
 
         timeInput: {
@@ -60,7 +65,10 @@ const useStyles = makeStyles(
 
 export default function Input(props) {
     const classes = useStyles();
+    const history = useHistory();
 
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const [eventName, setEventName] = useState("");
     const [startTime, setStartTime] = useState(new Date());
     const [endTime, setEndTime] = useState(new Date());
@@ -68,6 +76,21 @@ export default function Input(props) {
 
 
     // Handlers
+
+    function dateToString(date) {
+        let hour = date.getHours();
+        let minute = date.getMinutes();
+        console.log(minute)
+        if (minute === 0) {
+            minute = "00"
+        }
+        let ampm = "am";
+        if( hour > 12 ) {
+            hour -= 12;
+            ampm = "pm";
+        }
+        return (hour + ":" + minute + " " + ampm);
+    }
 
     const handleNameChange = (name) => {
         setEventName(name.target.value);
@@ -85,21 +108,37 @@ export default function Input(props) {
         setDescription(descriptionValue.target.value)
     }
 
+    // onCancel
+    function cancelForm() {
+        history.push("/");
+    }
 
     // On Submit
 
-    const submitForm = () => {
-        if (eventName.trim() === "") {
-            console.log("eventName is empty")
-            return;
-        }
-        db.collection(props.uid).doc(eventName).set({
+    function addTask() {
+        db.collection(props.uid).doc(props.date).collection("tasks").doc(eventName).set({
             name: eventName,
-            startTime: startTime,
-            endTime: endTime,
+            startTime: dateToString(startTime),
+            endTime: dateToString(endTime),
             description: description
         })
-        console.log(eventName);
+    }
+
+    async function submitForm() {
+        setLoading(true);
+        if (eventName.trim() === "") {
+            console.log("eventName is empty");
+            setLoading(false);
+            return;
+        }
+        try {
+            setError('')
+            await addTask();
+            history.push("/")
+        } catch {
+            setError('Failed to add task')
+        }
+        setLoading(false);
     }
 
 
@@ -107,7 +146,7 @@ export default function Input(props) {
 
     return (
         <div className={classes.inputFieldLayout}>
-            <Typography variant="h6">
+            <Typography variant="h6" className={classes.text}>
                 What do you want to get done tomorrow?
             </Typography>
             <div className={classes.taskName}>
@@ -138,12 +177,12 @@ export default function Input(props) {
             </div>
             <div className={classes.container}>
             <div className={classes.button}>
-                <Button variant="contained">
+                <Button variant="light" onClick={cancelForm}>
                     <Typography>Cancel</Typography>
                 </Button>
             </div>
             <div className={classes.button}>
-                <Button variant="contained" color="primary" onClick={submitForm}>
+                <Button disabled={loading} type="submit" className="w-100" onClick={submitForm}>
                     <Typography>Submit</Typography>
                 </Button>
             </div>

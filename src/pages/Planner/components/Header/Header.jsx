@@ -22,7 +22,7 @@ export default function Header() {
     return (
         <div className={classes.container}>
             <Typography variant='h3'  className={classes.text}>
-                How can Tomorrow be the best day possible?
+                Your best possible day looks like:
             </Typography>
         </div>
     )

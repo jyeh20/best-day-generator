@@ -22,7 +22,7 @@ function App() {
                     <Switch>
                         <PrivateRoute exact path="/" component = {Planner} />
                         <PrivateRoute path="/update-profile" component={UpdateProfile} />
-                        <Route path="/add" component={NewEvent} />
+                        <Route path="/add/:id" component={NewEvent} />
                         <Route path="/signup" component = {SignUp} />
                         <Route path="/login" component = {Login} />
                         <Route path="/forgot-password" component = {ForgotPassword} />

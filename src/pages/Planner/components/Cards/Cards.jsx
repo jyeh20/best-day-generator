@@ -23,6 +23,10 @@ const useStyles = makeStyles(
             backgroundColor:"#4a68ff",
         },
 
+        cardDiv: {
+            padding: '20px',
+        },
+
         expand: {
             alignSelf: 'flex-end',
             transform: 'rotate(0deg)',
@@ -72,55 +76,56 @@ export default function Cards(props) {
     };
 
     return(
-        <Card className={classes.card} >
+        <div className={classes.cardDiv}>
+            <Card className={classes.card} >
 
-            <CardContent className={classes.cardContent} className={classes.colors}>
-                <Typography>
-                    Test Event
-                </Typography>
-                <Typography>
-                    8:00am - 9:00am
-                </Typography>
-            </CardContent>
-
-            <CardActions disableSpacing className={classes.cardActions}>
-                <Typography>
-                    <Button
-                        variant="contained"
-                        color="#4a68ff"
-                        className={classes.button}
-                        startIcon={<CheckIcon />}
-                    >
-                        Done
-                    </Button>
-                </Typography>
-
-                <IconButton aria-label="edit">
-                    <Edit className={classes.colors} />
-                </IconButton>
-
-                <IconButton
-                    className={classes.expand, {
-                        [classes.expandOpen]: expanded,
-                        }}
-                        onClick={handleExpandClick}
-                        aria-expanded={expanded}
-                    aria-label="expand"
-                >
-                    <ExpandMore className={classes.colors} />
-                </IconButton>
-
-            </CardActions>
-
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <CardContent className={classes.height}>
-                    <Typography paragraph className={classes.colors}>
-                        Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10
-                        minutes.
+                <CardContent className={classes.cardContent} className={classes.colors}>
+                    <Typography>
+                        {props.eventName}
+                    </Typography>
+                    <Typography>
+                        {props.startTime} - {props.endTime}
                     </Typography>
                 </CardContent>
-            </Collapse>
 
-        </Card>
+                <CardActions disableSpacing className={classes.cardActions}>
+                    <Typography>
+                        <Button
+                            variant="contained"
+                            color="#4a68ff"
+                            className={classes.button}
+                            startIcon={<CheckIcon />}
+                        >
+                            Done
+                        </Button>
+                    </Typography>
+
+                    <IconButton aria-label="edit">
+                        <Edit className={classes.colors} />
+                    </IconButton>
+
+                    <IconButton
+                        className={classes.expand, {
+                            [classes.expandOpen]: expanded,
+                            }}
+                            onClick={handleExpandClick}
+                            aria-expanded={expanded}
+                        aria-label="expand"
+                    >
+                        <ExpandMore className={classes.colors} />
+                    </IconButton>
+
+                </CardActions>
+
+                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                    <CardContent className={classes.height}>
+                        <Typography paragraph className={classes.colors}>
+                            {props.description}
+                        </Typography>
+                    </CardContent>
+                </Collapse>
+
+            </Card>
+        </div>
     )
 }
