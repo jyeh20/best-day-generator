@@ -24,6 +24,7 @@ export default function DatePicker(props) {
   const classes = useStyles();
   const handleDateChange = (date) => {
     props.onChange(date);
+    console.log('props date: ' + props.date)
   };
 
   return (

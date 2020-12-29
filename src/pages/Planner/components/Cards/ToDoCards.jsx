@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import firebase from '../../../../firebase/firebase';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -64,9 +65,11 @@ const useStyles = makeStyles(
 /**
  * Individual Card component for use on Planner parent component
  */
-export default function Cards(props) {
+export default function ToDoCards(props) {
+    const db = firebase.firestore();
     const classes = useStyles();
     const [expanded, setExpanded] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     /**
      * handler for expanding for more details about an event
@@ -74,6 +77,20 @@ export default function Cards(props) {
     const handleExpandClick = () => {
     setExpanded(!expanded);
     };
+
+    async function markDone() {
+
+        try{
+            setLoading(true);
+            await db.collection(props.uid).doc(props.date).collection("tasks").doc(props.eventName)
+            .update({
+                completed: true
+            })
+        } catch {
+            console.log('Failed to update completed')
+        }
+        setLoading(false);
+    }
 
     return(
         <div className={classes.cardDiv}>
@@ -95,6 +112,8 @@ export default function Cards(props) {
                             color="#4a68ff"
                             className={classes.button}
                             startIcon={<CheckIcon />}
+                            onClick={markDone}
+                            disabled={loading}
                         >
                             Done
                         </Button>

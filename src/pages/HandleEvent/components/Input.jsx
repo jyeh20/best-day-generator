@@ -4,7 +4,7 @@ import { Link, useHistory } from 'react-router-dom'
 
 import { makeStyles } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider, KeyboardTimePicker } from '@material-ui/pickers';
-import { Button } from 'react-bootstrap';
+import { Button, Alert } from 'react-bootstrap';
 import DateFnsUtils from '@date-io/date-fns';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
@@ -29,6 +29,7 @@ const useStyles = makeStyles(
 
         text: {
             textAlign: 'center',
+            paddingBottom: '10px'
         },
 
         timeInput: {
@@ -80,7 +81,9 @@ export default function Input(props) {
     function dateToString(date) {
         let hour = date.getHours();
         let minute = date.getMinutes();
-        console.log(minute)
+        if (minute < 10) {
+            minute = "0" + minute
+        }
         if (minute === 0) {
             minute = "00"
         }
@@ -93,6 +96,7 @@ export default function Input(props) {
     }
 
     const handleNameChange = (name) => {
+        setError('');
         setEventName(name.target.value);
     }
 
@@ -108,6 +112,14 @@ export default function Input(props) {
         setDescription(descriptionValue.target.value)
     }
 
+    // Compare start/end times
+
+    function compareTimes(start, end) {
+        if (start > end) {
+            return true
+        }
+    }
+
     // onCancel
     function cancelForm() {
         history.push("/");
@@ -120,14 +132,21 @@ export default function Input(props) {
             name: eventName,
             startTime: dateToString(startTime),
             endTime: dateToString(endTime),
-            description: description
+            description: description,
+            date: props.date,
+            completed: false
         })
     }
 
     async function submitForm() {
         setLoading(true);
         if (eventName.trim() === "") {
-            console.log("eventName is empty");
+            setError("Task Name is empty!")
+            setLoading(false);
+            return;
+        }
+        if (compareTimes(startTime, endTime)) {
+            setError('Start Time should be before End Time!')
             setLoading(false);
             return;
         }
@@ -136,7 +155,7 @@ export default function Input(props) {
             await addTask();
             history.push("/")
         } catch {
-            setError('Failed to add task')
+            setError('Failed to add task, please try again!')
         }
         setLoading(false);
     }
@@ -147,8 +166,9 @@ export default function Input(props) {
     return (
         <div className={classes.inputFieldLayout}>
             <Typography variant="h6" className={classes.text}>
-                What do you want to get done tomorrow?
+                What task are you going to complete?
             </Typography>
+            {error && <Alert variant="danger">{error}</Alert>}
             <div className={classes.taskName}>
                 <TextField id="taskName" label="Task Name" variant="standard" fullWidth value={eventName} onChange={handleNameChange} />
             </div>

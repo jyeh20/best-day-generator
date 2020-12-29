@@ -32,7 +32,7 @@ const useStyles = makeStyles (
     })
 )
 
-export default function NewEvent(props) {
+export default function HandleEvent() {
     const { uid } = useAuth();
     const classes = useStyles();
     const date = window.location.pathname.slice(5);

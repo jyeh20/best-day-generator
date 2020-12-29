@@ -5,13 +5,8 @@ import { useAuth } from '../../contexts/AuthContexts';
 import firebase from '../../firebase/firebase';
 
 import { makeStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom'
-import Cards from './components/Cards/Cards';
-import Fade from '@material-ui/core/Fade';
-import Paper from '@material-ui/core/Paper';
-import IconButton from '@material-ui/core/IconButton';
-
-import AddCircle from '@material-ui/icons/AddCircle';
+import ToDoCardContainer from './components/CardContainers/ToDoCardContainer';
+import CompletedCardContainer from './components/CardContainers/CompletedCardContainer';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -32,6 +27,30 @@ const useStyles = makeStyles(
             flexDirection: 'column',
             elevation: 4,
             backgroundColor: '#f5f5f5',
+        },
+
+        text: {
+            textAlign: 'center',
+        },
+
+        completedPaper: {
+            display: 'flex',
+            paddingTop: '10px',
+            paddingBottom: '5%',
+            minWidth: '50%',
+            maxWidth: '70%',
+            margin: 'auto',
+            flexDirection: 'column',
+            elevation: 4,
+            backgroundColor: '#f5f5f5',
+        },
+
+        completedTasks: {
+            display: 'flex',
+            paddingTop: '40px',
+            minWidth: '100%',
+            margin: 'auto',
+            flexDirection: 'column',
         },
 
         cardStructure: {
@@ -76,7 +95,8 @@ const useStyles = makeStyles(
  * Main page of the application, where we can edit/delete/add events to our schedule
  */
 export default function Planner() {
-    const [items, setItems] = useState([]);
+    const [uncompletedTasks, setUncompletedTasks] = useState([]);
+    const [completedTasks, setCompletedTasks] = useState([]);
     const { uid } = useAuth();
     const classes = useStyles();
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -86,61 +106,84 @@ export default function Planner() {
     function dateToString(date) {
         var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
+        let dayNumber = date.getDate();
         let month = months[date.getMonth()];
         let day = days[date.getDay()];
         let year = date.getFullYear();
 
-        return (day + "-" + month + "-" + year);
+        return (day + dayNumber + "-" + month + "-" + year);
     }
 
     // Date Handler
 
     const handleDateChange = (date) => {
         setSelectedDate(date);
-      };
+    }
 
-    // useEffect to fetch data
 
+    function getCompleted() {
+        console.log("getCompleted: " + selectedDate)
+        db.collection(uid).doc(dateToString(selectedDate)).collection("tasks").where("completed", "==", true)
+        .get()
+        .then((tasks) => {
+            const docData = tasks.docs;
+            setCompletedTasks(docData);
+        });
+
+    }
+
+    function getToDo() {
+        console.log("toDo: " + selectedDate)
+        db.collection(uid).doc(dateToString(selectedDate)).collection("tasks").where("completed", "==", false)
+        .get()
+        .then((tasks) => {
+            const docData = tasks.docs;
+            setUncompletedTasks(docData);
+        });
+    }
+
+    async function getData() {
+        getCompleted();
+        getToDo();
+    }
+
+      // useEffect to fetch data
     useEffect(() => {
         db.collection(uid).doc(dateToString(selectedDate)).collection("tasks")
-      .get()
-      .then((tasks) => {
-        const docData = tasks.docs;
-        setItems(docData);
-      });
-      }, []);
+        .onSnapshot(function(snapshot) {
+            snapshot.docChanges().forEach(function(change) {
+                if (change.type === "added") {
+                    console.log("Task added ", change.doc.data());
+                }
+                if (change.type === "modified") {
+                    getData();
+                }
+                if (change.type === "removed") {
+                    console.log("Removed city: ", change.doc.data());
+                }
+            });
+        });
+        getData();
+    }, [selectedDate, setSelectedDate])
 
     return(
         <div className={classes.default}>
-
             <Header />
             <DatePicker date={selectedDate} onChange={handleDateChange} />
-            <Paper className={classes.paperSchedule}>
-                <div className={classes.cardStructure}>
-                    <Fade in={true} timeout={{enter: 4000}}>
-                        <div className={classes.gridLayout}>
-                            {items.map((item) => (
-                                <Cards
-                                eventName={item.data().name}
-                                description={item.data().description}
-                                startTime={item.data().startTime}
-                                endTime={item.data().endTime}
-                                />
-                            ))}
-                        </div>
-                    </Fade>
-
-
-                </div>
-                <div className={classes.addButton}>
-                    <Link to={`/add/${dateToString(selectedDate)}`}>
-                        <IconButton>
-                                <AddCircle />
-                        </IconButton>
-                    </Link>
-                </div>
-            </Paper>
+            <ToDoCardContainer
+                uid = {uid}
+                date = {dateToString(selectedDate)}
+                tasks = {uncompletedTasks}
+                completed = {false}
+            />
+            <div className={classes.completedTasks}>
+                <CompletedCardContainer
+                    uid = {uid}
+                    date = {dateToString(selectedDate)}
+                    tasks = {completedTasks}
+                    completed = {true}
+                />
+            </div>
         </div>
     )
 }
