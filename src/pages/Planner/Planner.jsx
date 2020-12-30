@@ -122,7 +122,6 @@ export default function Planner() {
 
 
     function getCompleted() {
-        console.log("getCompleted: " + selectedDate)
         db.collection(uid).doc(dateToString(selectedDate)).collection("tasks").where("completed", "==", true)
         .get()
         .then((tasks) => {
@@ -133,7 +132,6 @@ export default function Planner() {
     }
 
     function getToDo() {
-        console.log("toDo: " + selectedDate)
         db.collection(uid).doc(dateToString(selectedDate)).collection("tasks").where("completed", "==", false)
         .get()
         .then((tasks) => {
@@ -147,19 +145,24 @@ export default function Planner() {
         getToDo();
     }
 
+
+
       // useEffect to fetch data
     useEffect(() => {
         db.collection(uid).doc(dateToString(selectedDate)).collection("tasks")
         .onSnapshot(function(snapshot) {
             snapshot.docChanges().forEach(function(change) {
                 if (change.type === "added") {
-                    console.log("Task added ", change.doc.data());
+                    getData();
+                    console.log(change.doc.data().name + " has been added")
                 }
                 if (change.type === "modified") {
                     getData();
+                    console.log(change.doc.data().name + " has been modified")
                 }
                 if (change.type === "removed") {
-                    console.log("Removed city: ", change.doc.data());
+                    getData();
+                    console.log(change.doc.data().name + " has been deleted")
                 }
             });
         });

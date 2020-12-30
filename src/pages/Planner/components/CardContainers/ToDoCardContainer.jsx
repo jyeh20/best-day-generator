@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { useAuth } from '../../../../contexts/AuthContexts';
-import firebase from '../../../../firebase/firebase'
 
 import Paper from '@material-ui/core/Paper'
 import { makeStyles } from '@material-ui/core/styles';
@@ -17,8 +15,7 @@ const useStyles = makeStyles(
         paperSchedule: {
             display: 'flex',
             paddingTop: '40px',
-            minWidth: '50%',
-            maxWidth: '70%',
+            width: '70%',
             margin: 'auto',
             flexDirection: 'column',
             elevation: 4,
@@ -54,25 +51,29 @@ const useStyles = makeStyles(
 export default function ToDoCardContainer(props) {
     const classes = useStyles();
 
+    function GetData() {
+        return (props.tasks.map((item) => (
+            <ToDoCards
+            uid = {props.uid}
+            date = {props.date}
+            eventName={item.data().name}
+            description={item.data().description}
+            startTime={item.data().startTime}
+            endTime={item.data().endTime}
+            startTimeAsDate={item.data().startTimeAsDate}
+            endTimeAsDate={item.data().endTimeAsDate}
+            />
+        )))
+    }
+
     return(
         <Fade in={true} timeout={{enter: 2000}}>
             <Paper className={classes.paperSchedule}>
                 <Typography variant="h5" className={classes.text}>To-Do</Typography>
                 <div className={classes.cardStructure}>
-                    <Fade in={true} timeout={{enter: 4000}}>
                         <div className={classes.gridLayout}>
-                            {props.tasks.map((item) => (
-                                <ToDoCards
-                                uid = {props.uid}
-                                date = {props.date}
-                                eventName={item.data().name}
-                                description={item.data().description}
-                                startTime={item.data().startTime}
-                                endTime={item.data().endTime}
-                                />
-                            ))}
+                            <GetData />
                         </div>
-                    </Fade>
                 </div>
                 <div className={classes.addButton}>
                     <Link to={`/add/${props.date}`}>

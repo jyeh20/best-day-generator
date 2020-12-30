@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import firebase from '../../../../firebase/firebase';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,6 +14,7 @@ import Button from '@material-ui/core/Button';
 import UndoIcon from '@material-ui/icons/Undo';
 import Edit from '@material-ui/icons/Edit';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -29,6 +30,15 @@ const useStyles = makeStyles(
             padding: '20px',
         },
 
+        colors: {
+            color: '#FFFFFF',
+        },
+
+        column: {
+            display: 'flex',
+            flexDirection: 'column',
+        },
+
         expand: {
             alignSelf: 'flex-end',
             transform: 'rotate(0deg)',
@@ -36,10 +46,6 @@ const useStyles = makeStyles(
             transition: theme.transitions.create('transform', {
               duration: theme.transitions.duration.shortest,
             }),
-        },
-
-        colors: {
-            color: '#FFFFFF'
         },
 
         expandOpen: {
@@ -55,12 +61,15 @@ const useStyles = makeStyles(
             display: 'flex',
             margin: 'auto',
             flexDirection: 'column',
+            alignItems: 'center',
+            color: '#FFFFFF'
         },
 
         cardActions: {
             display: 'flex',
             marginBottom: 'auto',
-        }
+        },
+
     })
 )
 /**
@@ -68,9 +77,11 @@ const useStyles = makeStyles(
  */
 export default function ToDoCards(props) {
     const db = firebase.firestore();
+    const docRef = db.collection(props.uid).doc(props.date).collection("tasks").doc(props.eventName)
     const classes = useStyles();
     const [expanded, setExpanded] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [deleted, setDeleted] = useState(false);
 
 
     /**
@@ -81,10 +92,18 @@ export default function ToDoCards(props) {
     };
 
 
+    const handleDelete = () => {
+        let toDelete = window.confirm("Are you sure you want to delete this task?");
+        if (toDelete) {
+            setDeleted(true);
+        }
+    };
+
+
     async function toDo() {
-        try{
+        try {
             setLoading(true);
-            await db.collection(props.uid).doc(props.date).collection("tasks").doc(props.eventName)
+            await docRef
             .update({
                 completed: false
             })
@@ -94,12 +113,24 @@ export default function ToDoCards(props) {
         setLoading(false);
     }
 
+    async function removeTask() {
+        try {
+            setLoading(true);
+            await docRef
+            .delete()
+        } catch {
+            setDeleted(false);
+            console.log('Failed to delete task')
+        }
+        setLoading(false);
+    }
+
     return(
         <div className={classes.cardDiv}>
-            <Fade in={true} timeout={{enter: 4000}}>
+            <Fade in = {deleted===false} timeout={{enter: 2000, exit:2000}} onExited={removeTask}>
             <Card className={classes.card} >
 
-                <CardContent className={classes.cardContent} className={classes.colors}>
+                <CardContent className={classes.cardContent}>
                     <Typography>
                         {props.eventName}
                     </Typography>
@@ -107,6 +138,7 @@ export default function ToDoCards(props) {
                         {props.startTime} - {props.endTime}
                     </Typography>
                 </CardContent>
+
 
                 <CardActions disableSpacing className={classes.cardActions}>
                     <Typography>
@@ -116,10 +148,22 @@ export default function ToDoCards(props) {
                             className={classes.button}
                             startIcon={<UndoIcon />}
                             onClick={toDo}
+                            disabled={loading}
                         >
                             To-Do
                         </Button>
                     </Typography>
+
+                    <IconButton aria-label="edit">
+                        <Edit className={classes.colors} />
+                    </IconButton>
+
+                    <IconButton
+                        aria-label="delete"
+                        onClick={handleDelete}
+                    >
+                        <DeleteIcon className={classes.colors} />
+                    </IconButton>
 
                     <IconButton
                         className={classes.expand, {

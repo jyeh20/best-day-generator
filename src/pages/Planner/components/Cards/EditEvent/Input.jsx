@@ -1,82 +1,29 @@
 import React, { useState } from 'react';
-import firebase from '../../../firebase/firebase';
-import { Link, useHistory } from 'react-router-dom'
+import firebase from '../../../../../firebase/firebase';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core';
 import { MuiPickersUtilsProvider, KeyboardTimePicker } from '@material-ui/pickers';
 import { Button, Alert } from 'react-bootstrap';
 import DateFnsUtils from '@date-io/date-fns';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-var db = firebase.firestore();
+let db = firebase.firestore();
 
 const useStyles = makeStyles(
     (theme) => ({
-        inputFieldLayout: {
-            display: 'flex',
-            flexDirection: 'column',
-            paddingTop: '15px',
-        },
-
-        taskName: {
-            maxWidth: '200px',
-            display: 'flex',
-            flexDirection:'row',
-            alignSelf:'center',
-            paddingBottom: '30px',
-        },
-
-        text: {
-            textAlign: 'center',
-            paddingBottom: '10px'
-        },
-
-        timeInput: {
-            display: 'flex',
-            flexDirection: 'row',
-            alignSelf:'center',
-        },
-
-        timePickerWidth: {
-            maxWidth: '125px'
-        },
-
-        timePickerPadding: {
-            padding: '10px'
-        },
-
-        descriptionField: {
-            paddingTop: '30px',
-        },
-
-        container: {
-            display: 'flex',
-            flexDirection: 'row',
-            alignSelf: 'center',
-            paddingTop: '20px',
-        },
-
-        button: {
-            padding: '10px'
-        }
 
     })
 )
 
 export default function Input(props) {
     const classes = useStyles();
-    const history = useHistory();
-
-    const [error, setError] = useState('');
+    const [error, setError] = useState('')
     const [loading, setLoading] = useState(false);
-    const [eventName, setEventName] = useState("");
-    const [startTime, setStartTime] = useState(new Date());
-    const [endTime, setEndTime] = useState(new Date());
-    const [description, setDescription] = useState("");
-
-
-    // Handlers
+    const [eventName, setEventName] = useState(props.eventName);
+    const [startTime, setStartTime] = useState(props.startTimeAsDate.toDate());
+    const [endTime, setEndTime] = useState(props.endTimeAsDate.toDate());
+    const [description, setDescription] = useState(props.description);
 
     function dateToString(date) {
         let hour = date.getHours();
@@ -120,25 +67,26 @@ export default function Input(props) {
         }
     }
 
-    // onCancel
-    function cancelForm() {
-        history.push("/");
-    }
-
     // On Submit
 
-    function addTask() {
-        db.collection(props.uid).doc(props.date).collection("tasks").doc(eventName).set({
+    async function updateTask() {
+        return db.collection(props.uid).doc(props.date).collection("tasks").doc(eventName).update({
             name: eventName,
             startTime: dateToString(startTime),
+            startTimeAsDate: startTime,
+            endTimeAsDate: endTime,
             endTime: dateToString(endTime),
             description: description,
             date: props.date,
             completed: false
+        }).then(function() {
+            console.log("successfully updated");
+        }).catch(function (bug) {
+            console.log("error: ", bug)
         })
     }
 
-    async function submitForm() {
+    function submitForm() {
         setLoading(true);
         if (eventName.trim() === "") {
             setError("Task Name is empty!")
@@ -152,25 +100,19 @@ export default function Input(props) {
         }
         try {
             setError('')
-            await addTask();
-            history.push("/")
+            updateTask();
         } catch {
             setError('Failed to add task, please try again!')
         }
         setLoading(false);
+        props.close();
     }
-
-
-
 
     return (
         <div className={classes.inputFieldLayout}>
-            <Typography variant="h6" className={classes.text}>
-                What task are you going to complete?
-            </Typography>
             {error && <Alert variant="danger">{error}</Alert>}
             <div className={classes.taskName}>
-                <TextField id="taskName" label="Task Name" variant="standard" fullWidth value={eventName} onChange={handleNameChange} />
+                <TextField id="taskName" label="Task Name" defaultValue={eventName} variant="standard" fullWidth value={eventName} onChange={handleNameChange} />
             </div>
             <div className={classes.timeInput}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -196,11 +138,6 @@ export default function Input(props) {
                 />
             </div>
             <div className={classes.container}>
-            <div className={classes.button}>
-                <Button variant="light" onClick={cancelForm}>
-                    <Typography>Cancel</Typography>
-                </Button>
-            </div>
             <div className={classes.button}>
                 <Button disabled={loading} type="submit" className="w-100" onClick={submitForm}>
                     <Typography>Submit</Typography>

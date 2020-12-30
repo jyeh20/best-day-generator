@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import Input from './components/Input';
 import { useAuth } from '../../contexts/AuthContexts';
@@ -32,7 +32,8 @@ const useStyles = makeStyles (
     })
 )
 
-export default function HandleEvent() {
+export default function HandleEvent(props) {
+    console.log(props);
     const { uid } = useAuth();
     const classes = useStyles();
     const date = window.location.pathname.slice(5);
@@ -43,7 +44,7 @@ export default function HandleEvent() {
             <div className={classes.container}>
                 <Paper className={classes.paperLayout}>
                     <div>
-                        <Input date={date} uid={uid} />
+                        <Input {...props} uid={uid} date={date} />
                     </div>
                 </Paper>
             </div>
