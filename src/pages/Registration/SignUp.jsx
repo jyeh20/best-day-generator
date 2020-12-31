@@ -84,8 +84,8 @@ export default function SignUp() {
     return (
         <div className={classes.cardDiv}>
             <div className={classes.signUp}>
-                <Card className={classes.card}>
-                    <Card.Body>
+                <Card>
+                    <Card.Body className={classes.card}>
                         <h2 className="text-center mb-4">
                             Sign Up
                         </h2>
