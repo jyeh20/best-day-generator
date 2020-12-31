@@ -14,6 +14,7 @@ const useStyles = makeStyles(
             alignSelf: 'center',
             justifyContent: 'center',
             paddingTop: '10%',
+            paddingBottom: '7%',
         },
 
         signUp: {
