@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import firebase from '../../../firebase/firebase';
+import firebase from '../../../../../firebase/firebase';
 import { useHistory } from 'react-router-dom'
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -120,10 +120,7 @@ export default function Input(props) {
         }
     }
 
-    // onCancel
-    function cancelForm() {
-        history.push("/");
-    }
+
 
     // On Submit
 
@@ -163,6 +160,7 @@ export default function Input(props) {
             setError('Failed to add task, please try again!')
         }
         setLoading(false);
+        props.close();
     }
 
 
@@ -202,7 +200,7 @@ export default function Input(props) {
             </div>
             <div className={classes.container}>
             <div className={classes.button}>
-                <Button variant="light" onClick={cancelForm}>
+                <Button variant="light" onClick={props.close}>
                     <Typography>Cancel</Typography>
                 </Button>
             </div>

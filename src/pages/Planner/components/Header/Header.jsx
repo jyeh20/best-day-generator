@@ -1,29 +1,36 @@
 import React from 'react';
+import { useAuth } from '../../../../contexts/AuthContexts';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 const useStyles = makeStyles(
     (theme) => ({
-        container: {
-            display: 'flex',
-            margin: 'auto',
-            paddingBottom: '20px',
+
+        header: {
+            paddingTop: '5%'
         },
 
-        text: {
-            display: 'flex',
-            margin: 'auto',
-        },
+        button: {
+            position: 'absolute',
+            top: '6.3%',
+            right: '5%'
+        }
     })
 )
 
 export default function Header() {
     const classes = useStyles();
+    const { logout } = useAuth();
+
     return (
-        <div className={classes.container}>
-            <Typography variant='h3'  className={classes.text}>
-                Your best possible day looks like:
-            </Typography>
+        <div className={classes.header}>
+            <IconButton className={classes.button} onClick={logout}>
+                <ExitToAppIcon />
+            </IconButton>
         </div>
     )
 }

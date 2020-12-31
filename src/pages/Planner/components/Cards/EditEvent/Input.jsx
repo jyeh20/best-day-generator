@@ -12,7 +12,53 @@ let db = firebase.firestore();
 
 const useStyles = makeStyles(
     (theme) => ({
+        inputFieldLayout: {
+            display: 'flex',
+            flexDirection: 'column',
+            paddingTop: '15px',
+        },
 
+        taskName: {
+            maxWidth: '200px',
+            display: 'flex',
+            flexDirection:'row',
+            alignSelf:'center',
+            paddingBottom: '30px',
+        },
+
+        text: {
+            textAlign: 'center',
+            paddingBottom: '10px'
+        },
+
+        timeInput: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignSelf:'center',
+        },
+
+        timePickerWidth: {
+            maxWidth: '125px'
+        },
+
+        timePickerPadding: {
+            padding: '10px'
+        },
+
+        descriptionField: {
+            paddingTop: '30px',
+        },
+
+        container: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignSelf: 'center',
+            paddingTop: '20px',
+        },
+
+        button: {
+            padding: '10px'
+        }
     })
 )
 
@@ -138,6 +184,11 @@ export default function Input(props) {
                 />
             </div>
             <div className={classes.container}>
+            <div className={classes.button}>
+                <Button variant="light" onClick={props.cancelEdit}>
+                    <Typography>Cancel</Typography>
+                </Button>
+            </div>
             <div className={classes.button}>
                 <Button disabled={loading} type="submit" className="w-100" onClick={submitForm}>
                     <Typography>Submit</Typography>

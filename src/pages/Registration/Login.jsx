@@ -13,7 +13,7 @@ const useStyles = makeStyles(
             display: 'flex',
             alignSelf: 'center',
             justifyContent: 'center',
-            paddingTop: '5%',
+            paddingTop: '10%',
 
         },
 
@@ -70,6 +70,7 @@ export default function Login() {
             setError('')
             setLoading(true)
             await signinGoogle()
+            history.push("/")
         } catch {
             setError('Failed to sign in')
         }

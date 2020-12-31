@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import NewTask from './NewTask/NewTask';
 
-import Paper from '@material-ui/core/Paper'
+import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom'
 import ToDoCards from '../Cards/ToDoCards';
 import Fade from '@material-ui/core/Fade';
 import Typography from '@material-ui/core/Typography';
@@ -50,6 +50,12 @@ const useStyles = makeStyles(
 
 export default function ToDoCardContainer(props) {
     const classes = useStyles();
+    const [newTask, setNewTask] = useState(false);
+
+    const handleNewTask = () => {
+        setNewTask(!newTask)
+        console.log(newTask)
+    }
 
     function GetData() {
         return (props.tasks.map((item) => (
@@ -67,6 +73,8 @@ export default function ToDoCardContainer(props) {
     }
 
     return(
+        <>
+        {newTask ? <NewTask date={props.date} close={handleNewTask} newTask={newTask} /> : null}
         <Fade in={true} timeout={{enter: 2000}}>
             <Paper className={classes.paperSchedule}>
                 <Typography variant="h5" className={classes.text}>To-Do</Typography>
@@ -76,13 +84,12 @@ export default function ToDoCardContainer(props) {
                         </div>
                 </div>
                 <div className={classes.addButton}>
-                    <Link to={`/add/${props.date}`}>
-                        <IconButton>
-                                <AddCircle />
-                        </IconButton>
-                    </Link>
+                    <IconButton onClick={handleNewTask}>
+                            <AddCircle />
+                    </IconButton>
                 </div>
             </Paper>
         </Fade>
+        </>
     )
 }

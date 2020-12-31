@@ -126,7 +126,7 @@ export default function ToDoCards(props) {
     return(
         <div className={classes.cardDiv}>
             {editEvent ? <EditEvent {...props} close={handleEdit} editEvent={editEvent}/> : null}
-            <Fade in={deleted===false} timeout={{enter: 2000, exit: 2000}} onExited={removeTask}>
+            <Fade in={deleted===false} timeout={{enter: 500, exit: 500}} onExited={removeTask}>
             <Card className={classes.card} >
 
                 <CardContent className={classes.cardContent}>

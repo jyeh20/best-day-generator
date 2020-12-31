@@ -8,6 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import ToDoCardContainer from './components/CardContainers/ToDoCardContainer';
 import CompletedCardContainer from './components/CardContainers/CompletedCardContainer';
 
+
 const useStyles = makeStyles(
     (theme) => ({
         default: {

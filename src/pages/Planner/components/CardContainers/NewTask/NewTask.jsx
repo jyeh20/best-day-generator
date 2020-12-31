@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
 import Input from './Input';
+import { useAuth } from '../../../../../contexts/AuthContexts';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Zoom from '@material-ui/core/Zoom';
-
 
 const useStyles = makeStyles (
     (theme) => ({
@@ -44,22 +44,24 @@ const useStyles = makeStyles (
     })
 )
 
-export default function EditEvent(props) {
-    console.log(props)
+export default function NewTask(props) {
+    console.log(props);
+    const { uid } = useAuth();
     const classes = useStyles();
-    const [editing, setEditing] = useState(props.editEvent);
+    const [newTask, setNewTask] = useState(props.newTask)
 
-    const handleCancelButton = () => {
-        setEditing(false);
+    const handleClose = () => {
+        setNewTask(false);
     }
 
-    return (
+
+    return(
         <div className={classes.modal}>
-          <Zoom in={editing} timeout={{enter: 500, exit: 500}} onExited={props.close}>
-            <Paper className={classes.paper}>
-                <Input {...props} uid={props.uid} date={props.date} cancelEdit={handleCancelButton} />
-            </Paper>
-          </Zoom>
+            <Zoom in={newTask} timeout={{enter: 500, exit: 500}} onExited={props.close}>
+                <Paper className={classes.paper}>
+                    <Input {...props} uid={uid} close={handleClose} />
+                </Paper>
+            </Zoom>
         </div>
-      );
+    )
 }
