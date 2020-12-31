@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import ColorPicker from '../../Cards/EditEvent/ColorPicker';
 import firebase from '../../../../../firebase/firebase';
-import { useHistory } from 'react-router-dom'
 
 import { makeStyles } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider, KeyboardTimePicker } from '@material-ui/pickers';
@@ -66,14 +66,13 @@ const useStyles = makeStyles(
 
 export default function Input(props) {
     const classes = useStyles();
-    const history = useHistory();
-
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [eventName, setEventName] = useState("");
     const [startTime, setStartTime] = useState(new Date());
     const [endTime, setEndTime] = useState(new Date());
     const [description, setDescription] = useState("");
+    const [color, setColor] = useState('#f0b000');
 
 
     // Handlers
@@ -112,6 +111,10 @@ export default function Input(props) {
         setDescription(descriptionValue.target.value)
     }
 
+    const handleColorChange = (newColor) => {
+        setColor(newColor.hex)
+    }
+
     // Compare start/end times
 
     function compareTimes(start, end) {
@@ -124,11 +127,8 @@ export default function Input(props) {
 
     // On Submit
 
-    function addTask() {
-        console.log("startTime: " + startTime);
-        console.log(typeof(startTime));
-        console.log("end time: " + endTime);
-        db.collection(props.uid).doc(props.date).collection("tasks").doc(eventName).set({
+    async function addTask() {
+        return db.collection(props.uid).doc(props.date).collection("tasks").doc(eventName).set({
             name: eventName,
             startTime: dateToString(startTime),
             startTimeAsDate: startTime,
@@ -136,7 +136,12 @@ export default function Input(props) {
             endTime: dateToString(endTime),
             description: description,
             date: props.date,
-            completed: false
+            completed: false,
+            color: color,
+        }).then(() => {
+            console.log("successfully added")
+        }).catch((bug) => {
+            console.log('error: ', bug)
         })
     }
 
@@ -155,7 +160,6 @@ export default function Input(props) {
         try {
             setError('')
             addTask();
-            history.push("/")
         } catch {
             setError('Failed to add task, please try again!')
         }
@@ -198,6 +202,7 @@ export default function Input(props) {
                     variant="outlined"
                 />
             </div>
+            <ColorPicker {...props} color={color} handleColorChange={handleColorChange} />
             <div className={classes.container}>
             <div className={classes.button}>
                 <Button variant="light" onClick={props.close}>

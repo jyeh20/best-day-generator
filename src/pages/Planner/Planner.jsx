@@ -16,7 +16,8 @@ const useStyles = makeStyles(
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            marginTop: '5%'
+            marginTop: '5%',
+            minWidth: '500px',
         },
 
         paperSchedule: {

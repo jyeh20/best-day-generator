@@ -12,7 +12,6 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
 import UndoIcon from '@material-ui/icons/Undo';
-import Edit from '@material-ui/icons/Edit';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import DeleteIcon from '@material-ui/icons/Delete';
 
@@ -23,7 +22,7 @@ const useStyles = makeStyles(
             minWidth: '200px',
             margin:'auto',
             alignItems: 'center',
-            backgroundColor:"#4a68ff",
+            backgroundColor:"#04a602",
         },
 
         cardDiv: {
@@ -144,7 +143,7 @@ export default function ToDoCards(props) {
                     <Typography>
                         <Button
                             variant="contained"
-                            color="#4a68ff"
+                            style={{backgroundColor: "#f7f740"}}
                             className={classes.button}
                             startIcon={<UndoIcon />}
                             onClick={toDo}
@@ -153,10 +152,6 @@ export default function ToDoCards(props) {
                             To-Do
                         </Button>
                     </Typography>
-
-                    <IconButton aria-label="edit">
-                        <Edit className={classes.colors} />
-                    </IconButton>
 
                     <IconButton
                         aria-label="delete"

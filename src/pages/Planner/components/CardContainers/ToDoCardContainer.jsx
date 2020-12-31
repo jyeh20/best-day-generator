@@ -68,6 +68,7 @@ export default function ToDoCardContainer(props) {
             endTime={item.data().endTime}
             startTimeAsDate={item.data().startTimeAsDate}
             endTimeAsDate={item.data().endTimeAsDate}
+            color={item.data().color}
             />
         )))
     }

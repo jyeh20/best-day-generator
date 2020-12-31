@@ -25,7 +25,6 @@ const useStyles = makeStyles(
             minWidth: '200px',
             margin:'auto',
             alignItems: 'center',
-            backgroundColor:"#4a68ff",
         },
 
         cardDiv: {
@@ -50,7 +49,7 @@ const useStyles = makeStyles(
         },
 
         height: {
-            maxHeight: '50px',
+            maxHeight: '80px',
             overflow: 'scroll',
         },
 
@@ -127,7 +126,7 @@ export default function ToDoCards(props) {
         <div className={classes.cardDiv}>
             {editEvent ? <EditEvent {...props} close={handleEdit} editEvent={editEvent}/> : null}
             <Fade in={deleted===false} timeout={{enter: 500, exit: 500}} onExited={removeTask}>
-            <Card className={classes.card} >
+            <Card className={classes.card} style={{backgroundColor: props.color}}>
 
                 <CardContent className={classes.cardContent}>
                     <Typography>
@@ -142,7 +141,7 @@ export default function ToDoCards(props) {
                     <Typography>
                         <Button
                             variant="contained"
-                            color="#4a68ff"
+                            style={{backgroundColor: "#fafafa"}}
                             className={classes.button}
                             startIcon={<CheckIcon />}
                             onClick={markDone}
@@ -165,6 +164,7 @@ export default function ToDoCards(props) {
                         <DeleteIcon className={classes.colors} />
                     </IconButton>
 
+                    {props.description ?
                     <IconButton
                         className={classes.expand, {
                             [classes.expandOpen]: expanded,
@@ -175,6 +175,8 @@ export default function ToDoCards(props) {
                     >
                         <ExpandMore className={classes.colors} />
                     </IconButton>
+                    : null }
+
 
                 </CardActions>
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ColorPicker from './ColorPicker';
 import firebase from '../../../../../firebase/firebase';
 
 import { makeStyles } from '@material-ui/core';
@@ -58,6 +59,10 @@ const useStyles = makeStyles(
 
         button: {
             padding: '10px'
+        },
+
+        dash: {
+            paddingTop:'20px'
         }
     })
 )
@@ -70,6 +75,7 @@ export default function Input(props) {
     const [startTime, setStartTime] = useState(props.startTimeAsDate.toDate());
     const [endTime, setEndTime] = useState(props.endTimeAsDate.toDate());
     const [description, setDescription] = useState(props.description);
+    const [color, setColor] = useState(props.color)
 
     function dateToString(date) {
         let hour = date.getHours();
@@ -105,6 +111,10 @@ export default function Input(props) {
         setDescription(descriptionValue.target.value)
     }
 
+    const handleColorChange = (newColor) => {
+        setColor(newColor.hex)
+    }
+
     // Compare start/end times
 
     function compareTimes(start, end) {
@@ -116,13 +126,14 @@ export default function Input(props) {
     // On Submit
 
     async function updateTask() {
-        return db.collection(props.uid).doc(props.date).collection("tasks").doc(eventName).update({
+        return db.collection(props.uid).doc(props.date).collection("tasks").doc(props.eventName).update({
             name: eventName,
             startTime: dateToString(startTime),
             startTimeAsDate: startTime,
             endTimeAsDate: endTime,
             endTime: dateToString(endTime),
             description: description,
+            color: color,
             date: props.date,
             completed: false
         }).then(function() {
@@ -163,11 +174,11 @@ export default function Input(props) {
             <div className={classes.timeInput}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <div className={classes.timePickerPadding}>
-                <KeyboardTimePicker id="startTime" value={startTime} onChange={handleStartTimeChange} className={classes.timePickerWidth}></KeyboardTimePicker>
+                <KeyboardTimePicker id="startTime" label="Start Time" value={startTime} onChange={handleStartTimeChange} className={classes.timePickerWidth}></KeyboardTimePicker>
                 </div>
-                <Typography> _ </Typography>
+                <Typography className={classes.dash}> _ </Typography>
                 <div className={classes.timePickerPadding}>
-                <KeyboardTimePicker id="endTime" value={endTime} onChange={handleEndTimeChange} className={classes.timePickerWidth}></KeyboardTimePicker>
+                <KeyboardTimePicker id="endTime" label="End Time" value={endTime} onChange={handleEndTimeChange} className={classes.timePickerWidth}></KeyboardTimePicker>
                 </div>
             </MuiPickersUtilsProvider>
             </div>
@@ -183,6 +194,7 @@ export default function Input(props) {
                     variant="outlined"
                 />
             </div>
+            <ColorPicker {...props} color={color} handleColorChange={handleColorChange} />
             <div className={classes.container}>
             <div className={classes.button}>
                 <Button variant="light" onClick={props.cancelEdit}>

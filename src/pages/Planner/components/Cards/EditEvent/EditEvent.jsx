@@ -22,11 +22,13 @@ const useStyles = makeStyles (
         paper: {
             backgroundColor: '#e3f1fc',
             position: 'absolute',
-            top:'15%',
+            top:'30%',
             left: '30%',
             width: '40%',
             padding: '20px',
             borderRadius: '5px',
+            minWidth: '300px',
+            zIndex: 2,
         },
 
         button: {
@@ -45,7 +47,6 @@ const useStyles = makeStyles (
 )
 
 export default function EditEvent(props) {
-    console.log(props)
     const classes = useStyles();
     const [editing, setEditing] = useState(props.editEvent);
 
@@ -54,12 +55,14 @@ export default function EditEvent(props) {
     }
 
     return (
-        <div className={classes.modal}>
-          <Zoom in={editing} timeout={{enter: 500, exit: 500}} onExited={props.close}>
+        <>
+        <div className={classes.modal} onClick={handleCancelButton}>
+        </div>
+        <Zoom in={editing} timeout={{enter: 500, exit: 500}} onExited={props.close}>
             <Paper className={classes.paper}>
                 <Input {...props} uid={props.uid} date={props.date} cancelEdit={handleCancelButton} />
             </Paper>
-          </Zoom>
-        </div>
+        </Zoom>
+        </>
       );
 }

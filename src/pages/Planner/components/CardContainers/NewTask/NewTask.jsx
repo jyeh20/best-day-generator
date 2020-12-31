@@ -22,11 +22,12 @@ const useStyles = makeStyles (
         paper: {
             backgroundColor: '#e3f1fc',
             position: 'absolute',
-            top:'15%',
+            top:'30%',
             left: '30%',
             width: '40%',
             padding: '20px',
             borderRadius: '5px',
+            zIndex: 2,
         },
 
         button: {
@@ -56,12 +57,14 @@ export default function NewTask(props) {
 
 
     return(
-        <div className={classes.modal}>
-            <Zoom in={newTask} timeout={{enter: 500, exit: 500}} onExited={props.close}>
+        <>
+        <div className={classes.modal} onClick={handleClose}>
+        </div>
+        <Zoom in={newTask} timeout={{enter: 500, exit: 500}} onExited={props.close}>
                 <Paper className={classes.paper}>
                     <Input {...props} uid={uid} close={handleClose} />
                 </Paper>
-            </Zoom>
-        </div>
+        </Zoom>
+        </>
     )
 }

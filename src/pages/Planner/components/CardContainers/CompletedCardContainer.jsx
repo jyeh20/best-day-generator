@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react'
-import { useAuth } from '../../../../contexts/AuthContexts';
-import firebase from '../../../../firebase/firebase'
+import React from 'react'
 
 import Paper from '@material-ui/core/Paper'
 import { makeStyles } from '@material-ui/core/styles';
@@ -20,6 +18,8 @@ const useStyles = makeStyles(
             flexDirection: 'column',
             elevation: 4,
             backgroundColor: '#f5f5f5',
+            minHeight: '150px',
+            marginBottom: '5%'
         },
 
         text: {
