@@ -40,6 +40,12 @@ const useStyles = makeStyles(
             }),
         },
 
+        task: {
+            textAlign: 'center',
+            maxWidth: '80%',
+            wordWrap: 'break-word'
+        },
+
         colors: {
             color: '#FFFFFF'
         },
@@ -72,7 +78,7 @@ const useStyles = makeStyles(
  */
 export default function ToDoCards(props) {
     const db = firebase.firestore();
-    const docRef = db.collection(props.uid).doc(props.date).collection("tasks").doc(props.eventName)
+    const docRef = db.collection(props.uid).doc(props.date).collection("tasks").doc(props.taskName)
     const classes = useStyles();
     const [expanded, setExpanded] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -129,8 +135,8 @@ export default function ToDoCards(props) {
             <Card className={classes.card} style={{backgroundColor: props.color}}>
 
                 <CardContent className={classes.cardContent}>
-                    <Typography>
-                        {props.eventName}
+                    <Typography className={classes.task}>
+                        {props.taskName}
                     </Typography>
                     <Typography>
                         {props.startTime} - {props.endTime}

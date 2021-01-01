@@ -72,7 +72,7 @@ export default function Input(props) {
     const [startTime, setStartTime] = useState(new Date());
     const [endTime, setEndTime] = useState(new Date());
     const [description, setDescription] = useState("");
-    const [color, setColor] = useState('#f0b000');
+    const [color, setColor] = useState('#4a68ff');
 
 
     // Handlers

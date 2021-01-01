@@ -2,7 +2,6 @@ import React from 'react';
 import { useAuth } from '../../../../contexts/AuthContexts';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';

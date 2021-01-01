@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import Paper from '@material-ui/core/Paper'
 import { makeStyles } from '@material-ui/core/styles';
@@ -45,26 +45,22 @@ const useStyles = makeStyles(
 export default function CompletedCardContainer(props) {
     const classes = useStyles();
 
-    function GetData() {
-        return (props.tasks.map((item) => (
-            <CompletedCards
-            uid = {props.uid}
-            date = {props.date}
-            eventName={item.data().name}
-            description={item.data().description}
-            startTime={item.data().startTime}
-            endTime={item.data().endTime}
-            />
-        )))
-    }
-
     return(
         <Fade in={true} timeout={{enter: 2000}}>
         <Paper className={classes.completedPaper}>
                 <Typography variant="h5" className={classes.text}>Completed</Typography>
                 <div className={classes.cardStructure}>
                     <div className={classes.gridLayout}>
-                            <GetData />
+                        {(props.tasks.map((item) => (
+                            <CompletedCards
+                            uid = {props.uid}
+                            date = {props.date}
+                            taskName={item.data().name}
+                            description={item.data().description}
+                            startTime={item.data().startTime}
+                            endTime={item.data().endTime}
+                            />
+                        )))}
                     </div>
                 </div>
             </Paper>

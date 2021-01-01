@@ -57,22 +57,6 @@ export default function ToDoCardContainer(props) {
         console.log(newTask)
     }
 
-    function GetData() {
-        return (props.tasks.map((item) => (
-            <ToDoCards
-            uid = {props.uid}
-            date = {props.date}
-            eventName={item.data().name}
-            description={item.data().description}
-            startTime={item.data().startTime}
-            endTime={item.data().endTime}
-            startTimeAsDate={item.data().startTimeAsDate}
-            endTimeAsDate={item.data().endTimeAsDate}
-            color={item.data().color}
-            />
-        )))
-    }
-
     return(
         <>
         {newTask ? <NewTask date={props.date} close={handleNewTask} newTask={newTask} /> : null}
@@ -81,7 +65,19 @@ export default function ToDoCardContainer(props) {
                 <Typography variant="h5" className={classes.text}>To-Do</Typography>
                 <div className={classes.cardStructure}>
                         <div className={classes.gridLayout}>
-                            <GetData />
+                        {(props.tasks.map((item) => (
+                            <ToDoCards
+                            uid = {props.uid}
+                            date = {props.date}
+                            taskName={item.data().name}
+                            description={item.data().description}
+                            startTime={item.data().startTime}
+                            endTime={item.data().endTime}
+                            startTimeAsDate={item.data().startTimeAsDate}
+                            endTimeAsDate={item.data().endTimeAsDate}
+                            color={item.data().color}
+                            />
+                        )))}
                         </div>
                 </div>
                 <div className={classes.addButton}>

@@ -71,11 +71,12 @@ export default function Input(props) {
     const classes = useStyles();
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false);
-    const [eventName, setEventName] = useState(props.eventName);
+    const [taskName, settaskName] = useState(props.taskName);
     const [startTime, setStartTime] = useState(props.startTimeAsDate.toDate());
     const [endTime, setEndTime] = useState(props.endTimeAsDate.toDate());
     const [description, setDescription] = useState(props.description);
-    const [color, setColor] = useState(props.color)
+    const [color, setColor] = useState(props.color);
+    const collectionRef = db.collection(props.uid).doc(props.date).collection("tasks");
 
     function dateToString(date) {
         let hour = date.getHours();
@@ -96,7 +97,7 @@ export default function Input(props) {
 
     const handleNameChange = (name) => {
         setError('');
-        setEventName(name.target.value);
+        settaskName(name.target.value);
     }
 
     const handleStartTimeChange = (time) => {
@@ -126,26 +127,54 @@ export default function Input(props) {
     // On Submit
 
     async function updateTask() {
-        return db.collection(props.uid).doc(props.date).collection("tasks").doc(props.eventName).update({
-            name: eventName,
-            startTime: dateToString(startTime),
-            startTimeAsDate: startTime,
-            endTimeAsDate: endTime,
-            endTime: dateToString(endTime),
-            description: description,
-            color: color,
-            date: props.date,
-            completed: false
-        }).then(function() {
-            console.log("successfully updated");
-        }).catch(function (bug) {
-            console.log("error: ", bug)
-        })
+        // handle a change in name
+        if (taskName.localeCompare(props.taskName != 0)) {
+            collectionRef.doc(props.taskName
+                ).delete().then(function() {
+                    console.log("successfully deleted");
+                }).catch(function (bug) {
+                    console.log("error: ", bug)
+                })
+            return collectionRef.doc(taskName).set({
+                name: taskName,
+                startTime: dateToString(startTime),
+                startTimeAsDate: startTime,
+                endTimeAsDate: endTime,
+                endTime: dateToString(endTime),
+                description: description,
+                color: color,
+                date: props.date,
+                completed: false
+            }).then(function() {
+                console.log("successfully updated");
+            }).catch(function (bug) {
+                console.log("error: ", bug)
+            })
+        }
+
+        // handle changes to everything else
+        else {
+            return collectionRef.doc(props.taskName).update({
+                name: taskName,
+                startTime: dateToString(startTime),
+                startTimeAsDate: startTime,
+                endTimeAsDate: endTime,
+                endTime: dateToString(endTime),
+                description: description,
+                color: color,
+                date: props.date,
+                completed: false
+            }).then(function() {
+                console.log("successfully updated");
+            }).catch(function (bug) {
+                console.log("error: ", bug)
+            })
+        }
     }
 
     function submitForm() {
         setLoading(true);
-        if (eventName.trim() === "") {
+        if (taskName.trim() === "") {
             setError("Task Name is empty!")
             setLoading(false);
             return;
@@ -169,7 +198,7 @@ export default function Input(props) {
         <div className={classes.inputFieldLayout}>
             {error && <Alert variant="danger">{error}</Alert>}
             <div className={classes.taskName}>
-                <TextField id="taskName" label="Task Name" defaultValue={eventName} variant="standard" fullWidth value={eventName} onChange={handleNameChange} />
+                <TextField id="taskName" label="Task Name" defaultValue={taskName} variant="standard" fullWidth value={taskName} onChange={handleNameChange} />
             </div>
             <div className={classes.timeInput}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>

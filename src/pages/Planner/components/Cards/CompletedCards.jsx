@@ -56,6 +56,12 @@ const useStyles = makeStyles(
             overflow: 'scroll',
         },
 
+        task: {
+            textAlign: 'center',
+            maxWidth: '80%',
+            wordWrap: 'break-word'
+        },
+
         cardContent: {
             display: 'flex',
             margin: 'auto',
@@ -76,7 +82,7 @@ const useStyles = makeStyles(
  */
 export default function ToDoCards(props) {
     const db = firebase.firestore();
-    const docRef = db.collection(props.uid).doc(props.date).collection("tasks").doc(props.eventName)
+    const docRef = db.collection(props.uid).doc(props.date).collection("tasks").doc(props.taskName)
     const classes = useStyles();
     const [expanded, setExpanded] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -97,7 +103,6 @@ export default function ToDoCards(props) {
             setDeleted(true);
         }
     };
-
 
     async function toDo() {
         try {
@@ -128,16 +133,14 @@ export default function ToDoCards(props) {
         <div className={classes.cardDiv}>
             <Fade in = {deleted===false} timeout={{enter: 500, exit:500}} onExited={removeTask}>
             <Card className={classes.card} >
-
                 <CardContent className={classes.cardContent}>
-                    <Typography>
-                        {props.eventName}
+                    <Typography className={classes.task}>
+                        {props.taskName}
                     </Typography>
                     <Typography>
                         {props.startTime} - {props.endTime}
                     </Typography>
                 </CardContent>
-
 
                 <CardActions disableSpacing className={classes.cardActions}>
                     <Typography>
