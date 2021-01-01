@@ -3,10 +3,10 @@ import { Link, useHistory } from 'react-router-dom'
 import { auth } from '../../firebase/firebase';
 
 import { makeStyles } from '@material-ui/core/styles';
-import ColoredLine from './components/ColoredLine';
-import GoogleButton from 'react-google-button';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { useAuth } from '../../contexts/AuthContexts';
+import ColoredLine from './components/ColoredLine';
+import GoogleButton from 'react-google-button';
 
 const useStyles = makeStyles(
     (theme) => ({
@@ -50,7 +50,7 @@ export default function SignUp() {
     const passwordConfirmRef = useRef()
     const { signup, signinGoogle } = useAuth()
     const [error, setError] = useState('')
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const history = useHistory()
 
     async function handleSubmit(e) {
@@ -90,14 +90,18 @@ export default function SignUp() {
         .getRedirectResult()
         .then((result) => {
             if (result.credential) {
-            history.push("/")
+                history.push('/')
+            } else {
+                setLoading(false);
             }
         }).catch((error) => {
-            setError('Failed to create an account')
+            console.log("Not logged in with Google")
         });
     }, [])
 
     return (
+        <>
+        {loading ? null :
         <div className={classes.cardDiv}>
             <div className={classes.signUp}>
                 <Card>
@@ -137,5 +141,7 @@ export default function SignUp() {
                 </div>
             </div>
         </div>
+        }
+        </>
     )
 }

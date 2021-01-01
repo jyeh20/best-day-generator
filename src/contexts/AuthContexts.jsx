@@ -64,7 +64,8 @@ export function AuthProvider({ children }) {
         resetPassword,
         updateEmail,
         updatePassword,
-        signinGoogle
+        signinGoogle,
+
     }
 
     return (

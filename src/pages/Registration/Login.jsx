@@ -45,13 +45,14 @@ const useStyles = makeStyles(
 )
 
 export default function Login() {
+    const { login, signinGoogle } = useAuth()
+    const history = useHistory()
     const classes=useStyles()
     const emailRef = useRef()
     const passwordRef = useRef()
-    const { login, signinGoogle } = useAuth()
     const [error, setError] = useState('')
-    const [loading, setLoading] = useState(false)
-    const history = useHistory()
+    const [loading, setLoading] = useState(true)
+
 
     async function handleSubmit(e) {
         e.preventDefault()
@@ -75,7 +76,6 @@ export default function Login() {
             setError('')
             setLoading(true)
             await signinGoogle()
-            history.push("/")
         } catch {
             setError('Failed to sign in')
         }
@@ -88,14 +88,18 @@ export default function Login() {
         .getRedirectResult()
         .then((result) => {
             if (result.credential) {
-            history.push("/")
+                history.push('/')
+            } else {
+                setLoading(false);
             }
         }).catch((error) => {
-            setError('Failed to create an account')
+            console.log("Not logged in with Google")
         });
     }, [])
 
     return (
+        <>
+        {loading ? null :
         <div className={classes.mainLayout}>
             <div className={classes.login}>
                 <Card>
@@ -134,5 +138,7 @@ export default function Login() {
                 </div>
             </div>
         </div>
+        }
+        </>
     )
 }
