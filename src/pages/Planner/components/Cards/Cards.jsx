@@ -86,7 +86,6 @@ const useStyles = makeStyles(
             display: 'flex',
             justifyContent: 'center',
             marginBottom: 'auto',
-            border: '1px solid black'
         }
     })
 )
