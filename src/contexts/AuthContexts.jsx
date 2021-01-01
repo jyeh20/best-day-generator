@@ -19,7 +19,7 @@ export function AuthProvider({ children }) {
     }
 
     function signinGoogle() {
-        auth.signInWithRedirect(provider)
+        return auth.signInWithRedirect(provider)
     }
 
     function login(email, password) {

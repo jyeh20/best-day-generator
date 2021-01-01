@@ -1,5 +1,6 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
+import { auth } from '../../firebase/firebase';
 
 import { makeStyles } from '@material-ui/core/styles';
 import ColoredLine from './components/ColoredLine';
@@ -63,7 +64,6 @@ export default function SignUp() {
             setError('')
             setLoading(true)
             await signup(emailRef.current.value, passwordRef.current.value)
-            history.push("/")
         } catch {
             setError('Failed to create an account')
         }
@@ -78,13 +78,24 @@ export default function SignUp() {
             setError('')
             setLoading(true)
             await signinGoogle()
-            history.push("/")
         } catch {
             setError('Failed to sign in')
         }
 
         setLoading(false)
     }
+
+    useEffect(() => {
+        auth
+        .getRedirectResult()
+        .then((result) => {
+            if (result.credential) {
+            history.push("/")
+            }
+        }).catch((error) => {
+            setError('Failed to create an account')
+        });
+    }, [])
 
     return (
         <div className={classes.cardDiv}>
