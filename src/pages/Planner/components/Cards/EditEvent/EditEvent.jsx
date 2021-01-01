@@ -48,19 +48,19 @@ const useStyles = makeStyles (
 
 export default function EditEvent(props) {
     const classes = useStyles();
-    const [editing, setEditing] = useState(props.editEvent);
+    const [opened, setOpened] = useState(props.editEvent);
 
-    const handleCancelButton = () => {
-        setEditing(false);
+    const handleClose = () => {
+        setOpened(false);
     }
 
     return (
         <>
-        <div className={classes.modal} onClick={handleCancelButton}>
+        <div className={classes.modal} onClick={handleClose}>
         </div>
-        <Zoom in={editing} timeout={{enter: 500, exit: 500}} onExited={props.close}>
+        <Zoom in={opened} timeout={{enter: 500, exit: 500}} onExited={props.close}>
             <Paper className={classes.paper}>
-                <Input {...props} uid={props.uid} date={props.date} cancelEdit={handleCancelButton} />
+                <Input {...props} uid={props.uid} date={props.date} closeEdit={handleClose} />
             </Paper>
         </Zoom>
         </>

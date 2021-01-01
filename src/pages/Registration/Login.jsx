@@ -20,8 +20,12 @@ const useStyles = makeStyles(
         login: {
             display: 'flex',
             flexDirection: 'column',
-            minWidth: '400px',
+            minWidth: '300px',
             maxWidth: '80%',
+        },
+
+        formControl: {
+            minWidth: '20vw'
         },
 
         card: {
@@ -90,11 +94,11 @@ export default function Login() {
                         <Form onSubmit={handleSubmit}>
                             <Form.Group id="email">
                                 <Form.Label>Email</Form.Label>
-                                <Form.Control type="email" ref={emailRef} required />
+                                <Form.Control className={classes.formControl} type="email" ref={emailRef} required />
                             </Form.Group>
                             <Form.Group id="password">
                                 <Form.Label>Password</Form.Label>
-                                <Form.Control type="password" ref={passwordRef} required />
+                                <Form.Control className={classes.formControl} type="password" ref={passwordRef} required />
                             </Form.Group>
                             <Button disabled={loading} type="submit" className="w-100">
                                 Log In

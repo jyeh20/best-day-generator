@@ -5,8 +5,7 @@ import { useAuth } from '../../contexts/AuthContexts';
 import firebase from '../../firebase/firebase';
 
 import { makeStyles } from '@material-ui/core/styles';
-import ToDoCardContainer from './components/CardContainers/ToDoCardContainer';
-import CompletedCardContainer from './components/CardContainers/CompletedCardContainer';
+import CardContainer from './components/CardContainers/CardContainer'
 
 
 const useStyles = makeStyles(
@@ -176,14 +175,15 @@ export default function Planner() {
         <div className={classes.default}>
             <Header />
             <DatePicker date={selectedDate} onChange={handleDateChange} />
-            <ToDoCardContainer
+            <CardContainer
+                toDoContainer = {true}
                 uid = {uid}
                 date = {dateToString(selectedDate)}
                 tasks = {uncompletedTasks}
                 completed = {false}
             />
             <div className={classes.completedTasks}>
-                <CompletedCardContainer
+                <CardContainer
                     uid = {uid}
                     date = {dateToString(selectedDate)}
                     tasks = {completedTasks}

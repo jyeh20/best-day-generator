@@ -20,7 +20,7 @@ const useStyles = makeStyles(
         signUp: {
             display: 'flex',
             flexDirection: 'column',
-            minWidth: '400px',
+            minWidth: '300px',
             maxWidth: '80%',
         },
 

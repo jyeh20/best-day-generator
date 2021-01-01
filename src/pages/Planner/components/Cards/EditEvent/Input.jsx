@@ -191,7 +191,7 @@ export default function Input(props) {
             setError('Failed to add task, please try again!')
         }
         setLoading(false);
-        props.close();
+        props.closeEdit();
     }
 
     return (
