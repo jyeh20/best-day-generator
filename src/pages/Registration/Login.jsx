@@ -20,8 +20,8 @@ const useStyles = makeStyles(
         login: {
             display: 'flex',
             flexDirection: 'column',
-            minWidth: '40%',
-            maxWidth: '70%',
+            minWidth: '400px',
+            maxWidth: '80%',
         },
 
         card: {

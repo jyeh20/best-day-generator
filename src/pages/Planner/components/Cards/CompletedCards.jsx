@@ -164,6 +164,7 @@ export default function ToDoCards(props) {
                     </IconButton>
 
                     <IconButton
+                    // eslint-disable-next-line
                         className={classes.expand, {
                             [classes.expandOpen]: expanded,
                             }}

@@ -102,7 +102,6 @@ export default function Planner() {
     const { uid } = useAuth();
     const classes = useStyles();
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const db = firebase.firestore();
 
     // Date to String method
     function dateToString(date) {
@@ -123,35 +122,36 @@ export default function Planner() {
     }
 
 
-    function getCompleted() {
-        db.collection(uid).doc(dateToString(selectedDate)).collection("tasks").where("completed", "==", true)
-        .get()
-        .then((tasks) => {
-            const docData = tasks.docs;
-            setCompletedTasks(docData);
-        });
-
-    }
-
-    function getToDo() {
-        db.collection(uid).doc(dateToString(selectedDate)).collection("tasks").where("completed", "==", false)
-        .get()
-        .then((tasks) => {
-            const docData = tasks.docs;
-            setUncompletedTasks(docData);
-        });
-    }
-
-    async function getData() {
-        getCompleted();
-        getToDo();
-    }
-
-
 
       // useEffect to fetch data
     useEffect(() => {
-        db.collection(uid).doc(dateToString(selectedDate)).collection("tasks")
+        const db = firebase.firestore();
+        const collectionRef = db.collection(uid).doc(dateToString(selectedDate)).collection("tasks")
+
+        function getCompleted() {
+            collectionRef.where("completed", "==", true)
+            .get()
+            .then((tasks) => {
+                const docData = tasks.docs;
+                setCompletedTasks(docData);
+            });
+
+        }
+
+        function getToDo() {
+            collectionRef.where("completed", "==", false)
+            .get()
+            .then((tasks) => {
+                const docData = tasks.docs;
+                setUncompletedTasks(docData);
+            });
+        }
+
+        async function getData() {
+            getCompleted();
+            getToDo();
+        }
+        collectionRef
         .onSnapshot(function(snapshot) {
             snapshot.docChanges().forEach(function(change) {
                 if (change.type === "added") {
@@ -169,6 +169,7 @@ export default function Planner() {
             });
         });
         getData();
+        // eslint-disable-next-line
     }, [selectedDate, setSelectedDate])
 
     return(

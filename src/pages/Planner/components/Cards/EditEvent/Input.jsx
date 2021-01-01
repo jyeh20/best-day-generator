@@ -128,7 +128,7 @@ export default function Input(props) {
 
     async function updateTask() {
         // handle a change in name
-        if (taskName.localeCompare(props.taskName != 0)) {
+        if (taskName.localeCompare(props.taskName !== 0)) {
             collectionRef.doc(props.taskName
                 ).delete().then(function() {
                     console.log("successfully deleted");
