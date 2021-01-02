@@ -92,8 +92,8 @@ export default function Login() {
             } else {
                 setLoading(false);
             }
-        }).catch((error) => {
-            console.log("Not logged in with Google")
+        }).catch((authError) => {
+            console.log("Not logged in with Google ", authError)
         });
     }, [])
 
